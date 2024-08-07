@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Olympic } from '../models/Olympic';
 
 @Injectable({
@@ -29,4 +29,28 @@ export class OlympicService {
   getOlympics() {
     return this.olympics$.asObservable();
   }
+/**
+ * Cette méthode retourne un Observable contenant un Olympic lié avec sont totals de médaille
+ * @returns 
+ */
+  getTotalMedalsByCountry(): Observable<(Olympic & { totalMedals: number })[]> {
+    return this.olympics$.pipe(
+      map(olympics => olympics.map(olympic => ({
+        ...olympic,
+        totalMedals: olympic.participations.reduce((acc, participation) => acc + participation.medalsCount, 0)
+      })))
+    );
+  }
+  /**
+   * Cette méthode permet de récuperer un pays en fonction de sont id en paramètre
+   * @param id 
+   * @returns 
+   */
+  getCountryById(id: number): Observable<Olympic | undefined> {
+    return this.olympics$.pipe(
+      map((olympics: Olympic[]) => olympics.find(olympic => olympic.id === id))
+    );
+  }
+
+
 }
