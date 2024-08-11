@@ -57,11 +57,11 @@ export class DetailComponent implements OnInit {
       ]
     };
   }
-
+  // la méthode totalEntries permet de récupérer le nombre de participation d'un pays au JO
   get totalEntries(): number {
     return this.country ? this.country.participations.length : 0;
   }
-
+  // la méthode totalEntries permet de récupérer le nombre total de médailles d'un pays tous JO confondu
   get totalMedals(): number {
     return this.country ? this.country.participations.reduce((acc, p) => acc + p.medalsCount, 0) : 0;
   }
@@ -71,6 +71,6 @@ export class DetailComponent implements OnInit {
   }
 
   goHome(): void {
-    this.router.navigate(['']);
+    this.router.navigate(['']); // nous renvoie vers la page d'accueil de l'application
   }
 }

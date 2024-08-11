@@ -1,0 +1,34 @@
+:host {
+    display: block;
+    padding: 16px;
+  }
+
+  .header {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .header h1 {
+    background-color: #00a4a6;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+  }
+  p {
+    margin: 0;
+  }
+
+  .back-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #00a4a6;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .back-button:hover {
+    background-color: #007b7c;
+  }
