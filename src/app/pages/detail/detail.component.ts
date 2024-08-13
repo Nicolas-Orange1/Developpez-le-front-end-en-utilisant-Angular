@@ -54,7 +54,7 @@ export class DetailComponent implements OnInit {
       },
       xAxis: {
         type: 'category',
-        data: participations.map(p => p.city)
+        data: participations.map(p => p.year)
       },
       yAxis: {
         type: 'value'
