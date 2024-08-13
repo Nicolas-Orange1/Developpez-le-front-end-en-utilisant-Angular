@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Participation } from 'src/app/core/models/Participation';
 import { OlympicService } from 'src/app/core/services/olympic.service';
+import { EChartsOption } from 'echarts';
 
 
 
@@ -13,13 +14,17 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 })
 export class DetailComponent implements OnInit {
   country: Olympic | undefined;
-  chartOption: any;
+  chartOption!: EChartsOption;
 
   constructor(
     private route: ActivatedRoute,
     private olympicService: OlympicService,
     private router: Router
   ) {}
+
+  /**
+   * Récupération du pays en fonction du paramètre récupérer dans l'url afin d'afficher le diagramme du pays souhaité
+   */
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id !== null) {
@@ -33,7 +38,13 @@ export class DetailComponent implements OnInit {
     }
   }
 
-  getChartOptions(participations: Participation[]): any {
+  /**
+   * Cette méthode nous permet de récupérer les différentes informations pour la création du diagramme de la page détail
+   * Il récupère pour chaque participation qu'il reçoit la ville ainsi que le nombre de médaille gagner dans la participation
+   * @param participations 
+   * @returns 
+   */
+  getChartOptions(participations: Participation[]): EChartsOption {
     return {
       title: {
         text: ''
@@ -65,7 +76,7 @@ export class DetailComponent implements OnInit {
   get totalMedals(): number {
     return this.country ? this.country.participations.reduce((acc, p) => acc + p.medalsCount, 0) : 0;
   }
-
+  // la méthode totalAthletes permet de récupérer le nombre d'athletes d'un pays tous JO confondu
   get totalAthletes(): number {
     return this.country ? this.country.participations.reduce((acc, p) => acc + p.athleteCount, 0) : 0;
   }

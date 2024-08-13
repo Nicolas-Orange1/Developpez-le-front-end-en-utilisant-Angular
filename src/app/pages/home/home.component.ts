@@ -4,6 +4,8 @@ import { OlympicService } from 'src/app/core/services/olympic.service';
 import { Router } from '@angular/router';
 import { Olympic } from 'src/app/core/models/Olympic';
 import { Participation } from 'src/app/core/models/Participation';
+import { EChartsOption } from 'echarts';
+
 
 @Component({
   selector: 'app-home',
@@ -15,7 +17,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
 
   //Variable diagramme
-  public chartOption: any;
+  public chartOption: EChartsOption = {};
   public pieChartData: { name: string; value: number; id: number }[] = [];
   public showLegend = true;
   public colorScheme: { domain: string[] } = { domain: [] };
@@ -67,6 +69,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     );
   }
+
+  /**
+   * Calcul du nombre de JO total
+   * @param data
+   * @returns 
+   */
   calculateUniqueParticipations(data: Olympic[]): number {
     const uniqueYears = new Set<number>();
     data.forEach(item => {
@@ -80,12 +88,19 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
-  onChartClick(event: any): void {
-    const countryId = event.data.id;
-    const selectedCountry = this.pieChartData.find(item => item.id === countryId);
-    if (selectedCountry) {
-      this.router.navigate(['/detail', selectedCountry.id]);
+  /**
+   * la fonction onChartClick permet de renvoyer l'utilisateur vers la page d'un pays en fonction du pays sur lequel celui-ci à clické
+   * @param event 
+   */
+  onChartClick(event: { data: any }): void {
+    if (event.data && typeof event.data === 'object' && 'id' in event.data) {
+      const countryId = event.data.id as number;
+      const selectedCountry = this.pieChartData.find(item => item.id === countryId);
+      if (selectedCountry) {
+        this.router.navigate(['/detail', selectedCountry.id]);
+      }
+    } else {
+      console.error('Country ID is undefined or not available in event data');
     }
   }
 
